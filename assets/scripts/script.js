@@ -1,16 +1,51 @@
-// build a weather dashboard that will run in the browser and 
-//     feature dynamically updated HTML and CSS. 
-//     Use `localStorage` to store any persistent data. 
-    
-// ``` 
-// AS A traveler 
-// I WANT to see the weather outlook for multiple cities 
-// SO THAT I can plan a trip accordingly 
-// ``` 
-    
+// build a weather dashboard that will run in the browser and
+//     feature dynamically updated HTML and CSS.
+//     Use `localStorage` to store any persistent data.
+
+// ```
+// AS A traveler
+// I WANT to see the weather outlook for multiple cities
+// SO THAT I can plan a trip accordingly
+// ```
+//=========================================================================================
+// API KEY: 78ebcf5b45dec15369fc1101ca8eeb5d
+// example call: api.openweathermap.org/data/2.5/weather?q=London,uk&APPID=78ebcf5b45dec15369fc1101ca8eeb5d
+//=========================================================================================
 // ```
 // GIVEN a weather dashboard with form inputs
-// WHEN I search for a city
+// WHEN I search for a city//
+
+$("#submit-city").on("click", function(event) {
+  event.preventDefault();
+  var cityName = $("#city-search").val();
+  var cityButton = $("<li>").text(cityName);
+  cityButton.addClass("list-group-item");
+  $("#city-list").prepend(cityButton);
+  $("input[type='text']").val(""); //to reset input field (this may cause error down the line, check back later)
+  cityButton.on("click", function() {
+    var apikey = "78ebcf5b45dec15369fc1101ca8eeb5d";
+    var queryURL =
+      "https://api.openweathermap.org/data/2.5/weather?q=" +
+      cityName +
+      "&appid=" +
+      apikey +
+      "&units=imperial";
+    $.ajax({
+      url: queryURL,
+      method: "GET"
+    }).then(function(response) {
+      $(".main-city-name").html("<h2>" + response.name + " - " + "</h2>");
+      $(".description").html(
+        "<h6>Currently: " + response.weather[0].description + "</h6>"
+      );
+      $(".description").addClass("text-muted")
+      $(".temp").text("Temperature: " + response.main.temp + "F");
+      $(".humidity").text("Humidity: " + response.main.humidity);
+      $(".wind").text("Wind Speed: " + response.wind.speed);
+      console.log(response);
+    });
+  });
+});
 
 // THEN I am presented with current and future conditions for that city and that city is added to the search history
 // WHEN I view current weather conditions for that city
@@ -23,5 +58,4 @@
 // THEN I am again presented with current and future conditions for that city
 // WHEN I open the weather dashboard
 // THEN I am presented with the last searched city forecast
-// ``` 
-   
+// ```
