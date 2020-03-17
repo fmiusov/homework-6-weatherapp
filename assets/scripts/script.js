@@ -35,6 +35,11 @@ $("#submit-city").on("click", function(event) {
       method: "GET"
     }).then(function(response) {
       $(".main-city-name").html("<h2>" + response.name + " - " + "</h2>");
+      //https://stackoverflow.com/questions/44177417/how-to-display-openweathermap-weather-icon
+      var iconNumber = response.weather[0].icon;
+      var iconURL = "http://openweathermap.org/img/w/" + iconNumber + ".png";
+      $("#wicon").removeClass("collapse")
+      $("#wicon").attr("src", iconURL);
       $(".description").html(
         "<h6>Currently: " + response.weather[0].description + "</h6>"
       );
