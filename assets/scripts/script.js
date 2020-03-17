@@ -38,16 +38,29 @@ $("#submit-city").on("click", function(event) {
       //https://stackoverflow.com/questions/44177417/how-to-display-openweathermap-weather-icon
       var iconNumber = response.weather[0].icon;
       var iconURL = "http://openweathermap.org/img/w/" + iconNumber + ".png";
-      $("#wicon").removeClass("collapse")
+      $("#wicon").removeClass("collapse");
       $("#wicon").attr("src", iconURL);
       $(".description").html(
         "<h6>Currently: " + response.weather[0].description + "</h6>"
       );
-      $(".description").addClass("text-muted")
+      $(".description").addClass("text-muted");
       $(".temp").text("Temperature: " + response.main.temp + "F");
       $(".humidity").text("Humidity: " + response.main.humidity);
       $(".wind").text("Wind Speed: " + response.wind.speed);
-      console.log(response);
+      var queryUV =
+        "https://api.openweathermap.org/data/2.5/uvi?lat=" +
+        response.coord.lat +
+        "&lon=" +
+        response.coord.lon +
+        "&appid=" +
+        apikey;
+      console.log(queryUV);
+      $.ajax({
+        url: queryUV,
+        method: "GET"
+      }).then(function(response) {
+        $(".uvindex").text("UV Index = " + response.value);
+      });
     });
   });
 });
